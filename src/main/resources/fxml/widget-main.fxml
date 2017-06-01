@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import com.radeusgd.java.weatherwidget.control.SpinningFontIcon?>
+
+<?import javafx.scene.text.Text?>
+<?import com.radeusgd.java.weatherwidget.control.ValueControl?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.112-ea"
+           fx:controller="com.radeusgd.java.weatherwidget.controller.MainController"
+           prefHeight="300.0" prefWidth="400.0">
+    <BorderPane>
+        <center>
+            <!-- TODO some container -->
+            <Label>Warsaw, Poland</Label>
+            <ValueControl fx:id="test1" source="$controller.testStream" prefix="TestPref: "></ValueControl>
+
+        </center>
+        <bottom>
+            <HBox id="statusContainer">
+                <JFXButton fx:id="settingsButton">
+                    <graphic>
+                        <FontIcon iconLiteral="fa-wrench" />
+                    </graphic>
+                </JFXButton>
+                <JFXButton fx:id="refreshButton">
+                    <graphic>
+                        <FontIcon iconLiteral="fa-refresh" />
+                    </graphic>
+                </JFXButton>
+                <Region HBox.hgrow="ALWAYS" />
+                <FontIcon fx:id="errorIcon" iconLiteral="fa-exclamation-triangle" />
+                <SpinningFontIcon fx:id="workingIcon" iconLiteral="fa-cog" />
+            </HBox>
+        </bottom>
+    </BorderPane>
+</StackPane>
