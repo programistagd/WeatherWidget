@@ -1,5 +1,11 @@
 package com.radeusgd.java.weatherwidget;
 
+import com.radeusgd.java.weatherwidget.network.PollutionDataProvider;
+import com.radeusgd.java.weatherwidget.network.WeatherDataSource;
+import com.radeusgd.java.weatherwidget.network.WeatherProxy;
+import com.radeusgd.java.weatherwidget.network.datasources.MeteoWaw;
+import com.radeusgd.java.weatherwidget.network.datasources.OpenWeatherMap;
+import com.radeusgd.java.weatherwidget.network.datasources.PowietrzeGiosGov;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -12,6 +18,9 @@ import javafx.stage.Stage;
 import org.apache.log4j.BasicConfigurator;
 import com.jfoenix.controls.JFXDecorator;
 import com.jfoenix.controls.JFXDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Radek on 01.06.2017.
@@ -85,6 +94,21 @@ public class AppMain extends Application{
 
         Thread.setDefaultUncaughtExceptionHandler(
                 (t, e) -> log.error("Uncaught exception in thread \'" + t.getName() + "\'", e));//Log uncaught exceptions
+
+
+        ///TODO that's only testing
+        List<WeatherDataSource> sources = new ArrayList();
+        sources.add(new MeteoWaw());
+        sources.add(new OpenWeatherMap("db09a595e245a0ee1640c8e9ecdaff52"));
+        WeatherProxy wp = new WeatherProxy(sources);
+        wp.getStatusStream().subscribe(evt -> System.out.println(evt));
+        wp.getUpdateStream().subscribe(w -> System.out.println(w.temperature+"; "+w.clouds));
+        wp.manualRefreshRequest();
+
+        PollutionDataProvider pdp = new PollutionDataProvider(new PowietrzeGiosGov());
+        pdp.getStatusStream().subscribe(evt -> System.out.println(evt));
+        pdp.getUpdateStream().subscribe(p -> System.out.println(p.pm10+"; "+p.pm25));
+        pdp.manualRefreshRequest();
 
         Platform.setImplicitExit(true);//Make application exit when windows is closed
         Application.launch(AppMain.class, args);
