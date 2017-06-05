@@ -101,6 +101,7 @@ public class AppMain extends Application{
         sources.add(new MeteoWaw());
         sources.add(new OpenWeatherMap("db09a595e245a0ee1640c8e9ecdaff52"));
         WeatherProxy wp = new WeatherProxy(sources);
+        wp.chooseSource(1);
         wp.getStatusStream().subscribe(evt -> System.out.println(evt));
         wp.getUpdateStream().subscribe(w -> System.out.println(w.temperature+"; "+w.clouds));
         wp.manualRefreshRequest();
