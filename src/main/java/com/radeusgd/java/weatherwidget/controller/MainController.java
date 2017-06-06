@@ -1,6 +1,7 @@
 package com.radeusgd.java.weatherwidget.controller;
 
 import com.radeusgd.java.weatherwidget.control.ValueControl;
+import com.radeusgd.java.weatherwidget.event.StatusEvent;
 import com.radeusgd.java.weatherwidget.network.PollutionProxy;
 import com.radeusgd.java.weatherwidget.network.WeatherDataSource;
 import com.radeusgd.java.weatherwidget.network.WeatherProxy;
@@ -13,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import rx.Observable;
 import rx.observables.JavaFxObservable;
+import rx.subscribers.JavaFxSubscriber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +96,21 @@ public class MainController {
         JavaFxObservable.actionEventsOf(settingsButton).subscribe(evt -> {
             System.out.println("TODO: show settings");
         });
+
+        Observable<StatusEvent> statusStreams = weather.getStatusStream().mergeWith(pollution.getStatusStream());
+        Observable<Boolean> isWorking = statusStreams.map(statusEvent -> {
+            switch(statusEvent){
+                case UPDATE_COMPLETED:
+                case UPDATE_FAILED:
+                    return -1;
+                case UPDATE_IN_PROGRESS:
+                    return 1;
+            }
+            return 0;//actually unreachable, but IDE doesn't get it?
+        }).scan(0, (x,y) -> x + y)
+        .map(activeAmount -> (activeAmount > 0));
+
+        workingIcon.visibleProperty().bind(JavaFxSubscriber.toBinding(isWorking));
     }
 
     @FXML
