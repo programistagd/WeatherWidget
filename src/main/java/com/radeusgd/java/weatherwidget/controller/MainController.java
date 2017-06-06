@@ -1,5 +1,6 @@
 package com.radeusgd.java.weatherwidget.controller;
 
+import com.radeusgd.java.weatherwidget.AppMain;
 import com.radeusgd.java.weatherwidget.control.ValueControl;
 import com.radeusgd.java.weatherwidget.event.StatusEvent;
 import com.radeusgd.java.weatherwidget.network.PollutionProxy;
@@ -9,13 +10,17 @@ import com.radeusgd.java.weatherwidget.network.datasources.MeteoWaw;
 import com.radeusgd.java.weatherwidget.network.datasources.OpenWeatherMap;
 import com.radeusgd.java.weatherwidget.network.datasources.PowietrzeGiosGov;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 import rx.Observable;
 import rx.observables.JavaFxObservable;
 import rx.subscribers.JavaFxSubscriber;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +28,7 @@ import java.util.List;
  * Created by Radek on 01.06.2017.
  */
 public class MainController {
-    private static final int ERROR_MSG_MAX_LENGTH = 400;
-    private static final int ERROR_MSG_DURATION = 30;//Show error icon for 30s
+    private static final String FXML_SETTINGS_DIALOG_TEMPLATE = "/fxml/dialog-settings.fxml";
 
     @FXML
     private ValueControl temperature;
@@ -94,7 +98,7 @@ public class MainController {
         });
 
         JavaFxObservable.actionEventsOf(settingsButton).subscribe(evt -> {
-            System.out.println("TODO: show settings");
+            showSettings();
         });
 
         Observable<StatusEvent> statusStreams = weather.getStatusStream().mergeWith(pollution.getStatusStream());
@@ -111,6 +115,26 @@ public class MainController {
         .map(activeAmount -> (activeAmount > 0));
 
         workingIcon.visibleProperty().bind(JavaFxSubscriber.toBinding(isWorking));
+
+        errorIcon.setVisible(false);//TODO error handling
+    }
+
+    SettingsDialogController settingsDialogController;
+
+    private void showSettings(){
+        if(settingsDialogController == null){
+            settingsDialogController = new SettingsDialogController();
+            FXMLLoader loader = new FXMLLoader(AppMain.class.getResource(FXML_SETTINGS_DIALOG_TEMPLATE));
+            loader.setController(settingsDialogController);
+            try {
+                loader.load();
+            } catch (IOException e) {
+                //log.error(e);
+                throw new RuntimeException(e);
+            }
+        }
+
+        settingsDialogController.show();
     }
 
     @FXML

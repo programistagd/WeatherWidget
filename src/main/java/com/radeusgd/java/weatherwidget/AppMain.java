@@ -34,24 +34,6 @@ public class AppMain extends Application{
 
     private Stage mainStage;
 
-    private void onClose() {
-        log.info("onClose");
-
-        /*if (closeDialogController == null) {
-            closeDialogController = new CloseDialogController();
-            FXMLLoader loader = new FXMLLoader(AppMain.class.getResource(FXML_CLOSE_DIALOG_TEMPLATE));
-            loader.setController(closeDialogController);
-            try {
-                loader.load();
-            } catch (IOException e) {
-                log.error(e);
-                throw new RuntimeException(e);
-            }
-        }
-
-        closeDialogController.show(getMainPane());*/
-    }
-
     public void start(Stage primaryStage) throws Exception {
         log.info("Starting Weather Widget...");
 
@@ -62,7 +44,6 @@ public class AppMain extends Application{
         JFXDecorator decorator = new JFXDecorator(mainStage, pane, false, false, true);
         ObservableList<Node> buttonsList = ((Pane) decorator.getChildren().get(0)).getChildren();
         buttonsList.get(buttonsList.size() - 1).getStyleClass().add("close-button");
-        //decorator.setOnCloseButtonAction(this::onClose);
 
         Scene scene = new Scene(decorator);
         scene.setFill(null);

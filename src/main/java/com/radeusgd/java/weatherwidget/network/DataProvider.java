@@ -16,7 +16,7 @@ public abstract class DataProvider<T> {
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(DataProvider.class);
 
     private static final int POLL_INTERVAL = 60;
-    private static final int INITIAL_DELAY = 3;
+    private static final int INITIAL_DELAY = 2;
     private static final int TIMEOUT = 20;
 
     public DataProvider(){
