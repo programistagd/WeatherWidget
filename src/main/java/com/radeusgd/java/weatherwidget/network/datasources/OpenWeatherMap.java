@@ -18,13 +18,6 @@ public class OpenWeatherMap extends WeatherDataSource {
         URL = "http://api.openweathermap.org/data/2.5/weather?q=Warsaw,pl&units=metric&appid="+API_KEY;
     }
 
-    String formatWind(JsonObject wind){
-        String speed = wind.get("speed").getAsString();
-        int deg = wind.get("deg").getAsInt();
-        //TODO directions?
-        return speed + " " + Integer.toString(deg);
-    }
-
     @Override
     public void makeRequest() {
         RxNetty.createHttpRequest(HttpClientRequest.createGet(URL))
@@ -33,10 +26,12 @@ public class OpenWeatherMap extends WeatherDataSource {
                     JsonParser p = new JsonParser();
                     JsonObject o = p.parse(html).getAsJsonObject();
                     JsonObject m = o.get("main").getAsJsonObject();
+                    JsonObject wind = o.get("wind").getAsJsonObject();
                     return new WeatherEvent(m.get("temp").getAsString(),
                             m.get("pressure").getAsString(),
-                            "TODO",
-                            formatWind(o.get("wind").getAsJsonObject()),
+                            o.get("clouds").getAsJsonObject().get("all").getAsString(),
+                            wind.get("speed").getAsString(),
+                            wind.get("deg").getAsString(),
                             m.get("humidity").getAsString(),
                             o.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("icon").getAsString());
                 }

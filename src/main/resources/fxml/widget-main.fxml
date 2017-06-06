@@ -16,10 +16,18 @@
            prefHeight="300.0" prefWidth="400.0">
     <BorderPane>
         <center>
-            <!-- TODO some container -->
+            <VBox id="contentContainer">
             <Label>Warsaw, Poland</Label>
-            <ValueControl fx:id="test1" source="$controller.testStream" prefix="TestPref: "></ValueControl>
+            <ValueControl fx:id="temperature" prefix="Temperature: "></ValueControl>
+            <ValueControl fx:id="humidity" prefix="Humidity: "></ValueControl>
+            <ValueControl fx:id="clouds" prefix="Cloudiness: "></ValueControl>
+            <ValueControl fx:id="windSpeed" prefix="Wind: "></ValueControl>
+            <!--<ValueControl fx:id="windDir" prefix="Kierunek wiatru: "></ValueControl>-->
+            <ValueControl fx:id="pressure" prefix="Atmospheric pressure: "></ValueControl>
 
+            <ValueControl fx:id="pm25" prefix="PM2.5: "></ValueControl>
+            <ValueControl fx:id="pm10" prefix="PM10: "></ValueControl>
+            </VBox>
         </center>
         <bottom>
             <HBox id="statusContainer">

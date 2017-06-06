@@ -3,7 +3,9 @@ package com.radeusgd.java.weatherwidget.network;
 
 import com.radeusgd.java.weatherwidget.event.StatusEvent;
 import rx.Observable;
+import rx.schedulers.JavaFxScheduler;
 import rx.subjects.PublishSubject;
+import rx.subjects.Subject;
 
 import java.util.concurrent.TimeUnit;
 
@@ -47,5 +49,12 @@ public abstract class DataProvider<T> {
 
     public void manualRefreshRequest(){
         manualRefreshRequests.onNext(new RefreshRequest());
+    }
+
+    protected Observable<String> prepareSubjectForFX(Subject<String, String> sub){
+        return sub.asObservable()
+                .map(v -> (v == null) ? "-" : v) //make null values into dashes indicating no given value
+                .mergeWith(Observable.just("-")) //add initial value (before first update etc.)
+                .observeOn(JavaFxScheduler.getInstance()); //force JavaFX thread
     }
 }

@@ -1,6 +1,6 @@
 package com.radeusgd.java.weatherwidget;
 
-import com.radeusgd.java.weatherwidget.network.PollutionDataProvider;
+import com.radeusgd.java.weatherwidget.network.PollutionProxy;
 import com.radeusgd.java.weatherwidget.network.WeatherDataSource;
 import com.radeusgd.java.weatherwidget.network.WeatherProxy;
 import com.radeusgd.java.weatherwidget.network.datasources.MeteoWaw;
@@ -13,11 +13,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.apache.log4j.BasicConfigurator;
 import com.jfoenix.controls.JFXDecorator;
-import com.jfoenix.controls.JFXDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,7 @@ public class AppMain extends Application{
 
     private static final String FXML_MAIN_FORM_TEMPLATE = "/fxml/widget-main.fxml";
     private static final String JFX_CSS = "/css/jfx.css";
+    private static final String ICON = "/icons/icon.png";
 
     private Stage mainStage;
 
@@ -56,12 +57,6 @@ public class AppMain extends Application{
 
         mainStage = primaryStage;
 
-        //setupTooltipDuration();
-
-        //setupDataSources();
-
-        //setupEventHandler();
-
         Parent pane = FXMLLoader.load(AppMain.class.getResource(FXML_MAIN_FORM_TEMPLATE));
         //Transform the main stage (aka the main window) into an undecorated window
         JFXDecorator decorator = new JFXDecorator(mainStage, pane, false, false, true);
@@ -82,7 +77,7 @@ public class AppMain extends Application{
         mainStage.setHeight(300);
         mainStage.setResizable(false);
 
-        //addLogo();
+        mainStage.getIcons().add(new Image(AppMain.class.getResourceAsStream(ICON)));
 
         mainStage.show();
 
@@ -94,22 +89,6 @@ public class AppMain extends Application{
 
         Thread.setDefaultUncaughtExceptionHandler(
                 (t, e) -> log.error("Uncaught exception in thread \'" + t.getName() + "\'", e));//Log uncaught exceptions
-
-
-        ///TODO that's only testing
-        List<WeatherDataSource> sources = new ArrayList();
-        sources.add(new MeteoWaw());
-        sources.add(new OpenWeatherMap("db09a595e245a0ee1640c8e9ecdaff52"));
-        WeatherProxy wp = new WeatherProxy(sources);
-        wp.chooseSource(1);
-        wp.getStatusStream().subscribe(evt -> System.out.println(evt));
-        wp.getUpdateStream().subscribe(w -> System.out.println(w.temperature+"; "+w.clouds));
-        wp.manualRefreshRequest();
-
-        PollutionDataProvider pdp = new PollutionDataProvider(new PowietrzeGiosGov());
-        pdp.getStatusStream().subscribe(evt -> System.out.println(evt));
-        pdp.getUpdateStream().subscribe(p -> System.out.println(p.pm10+"; "+p.pm25));
-        pdp.manualRefreshRequest();
 
         Platform.setImplicitExit(true);//Make application exit when windows is closed
         Application.launch(AppMain.class, args);

@@ -33,7 +33,7 @@ public class MeteoWaw extends WeatherDataSource {
         RxNetty.createHttpRequest(HttpClientRequest.createGet(URL))
                 .compose(this::unpackResponse)
                 .map(html ->
-                    new WeatherEvent(findSpan(html, "PARAM_0_TA"), findSpan(html, "PARAM_0_PR"),"-",findSpan(html, "PARAM_0_WV")+" "+findSpan(html, "PARAM_0_WDABBR"),findSpan(html, "PARAM_0_RH"),"")
+                    new WeatherEvent(findSpan(html, "PARAM_0_TA"), findSpan(html, "PARAM_0_PR"),null,findSpan(html, "PARAM_0_WV"), findSpan(html, "PARAM_0_WDABBR"),findSpan(html, "PARAM_0_RH"),"")
                 ).subscribe(d -> dataStream.onNext(d));
     }
 }

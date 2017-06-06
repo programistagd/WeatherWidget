@@ -58,4 +58,5 @@ public class ValueControl extends Pane {
     public void setPrefix(String prefix) {
         prefixProperty.set(prefix);
     }
+
 }
