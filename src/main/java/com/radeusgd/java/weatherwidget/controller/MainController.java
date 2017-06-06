@@ -78,8 +78,11 @@ public class MainController {
         temperature.setSource(weather.getTemperatureStream());
         humidity.setSource(weather.getHumidityStream());
         clouds.setSource(weather.getCloudsStream());
-        windSpeed.setSource(weather.getWindSpeedStream());
-        //TODO windSpeed
+
+        Observable<String> wind = weather.getWindSpeedStream().zipWith(weather.getWindDirStream(), (speed,dir) -> speed + " " + dir);
+
+        windSpeed.setSource(wind);
+
         pressure.setSource(weather.getPressureStream());
 
         //TODO icon
