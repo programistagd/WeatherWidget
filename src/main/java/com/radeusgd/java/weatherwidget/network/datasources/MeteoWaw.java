@@ -19,13 +19,13 @@ public class MeteoWaw extends WeatherDataSource {
     private static final String URL = "http://www.meteo.waw.pl/";
 
     private String findSpan(String html, String id){
-        Pattern pattern = Pattern.compile("<span id=\\\""+id+"\\\">([\\d,]+)<\\/span>");
+        Pattern pattern = Pattern.compile("<span id=\\\""+id+"\\\">([\\d,NEWS]+)<\\/span>");
         Matcher m = pattern.matcher(html);
         if (m.find()) {
             return m.group(1).trim();
         }
         //TODO consider throwing an exception here -> corrupted data?
-        return "-";
+        return null;
     }
 
     @Override
@@ -33,7 +33,14 @@ public class MeteoWaw extends WeatherDataSource {
         RxNetty.createHttpRequest(HttpClientRequest.createGet(URL))
                 .compose(this::unpackResponse)
                 .map(html ->
-                    new WeatherEvent(findSpan(html, "PARAM_0_TA"), findSpan(html, "PARAM_0_PR"),null,findSpan(html, "PARAM_0_WV"), findSpan(html, "PARAM_0_WDABBR"),findSpan(html, "PARAM_0_RH"),"")
+                    new WeatherEvent(
+                            findSpan(html, "PARAM_0_TA"),
+                            findSpan(html, "PARAM_0_PR"),
+                            null,
+                            findSpan(html, "PARAM_0_WV"),
+                            findSpan(html, "PARAM_0_WDABBR"),
+                            findSpan(html, "PARAM_0_RH"),
+                            null)
                 ).subscribe(d -> dataStream.onNext(d));
     }
 }

@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import rx.Observable;
+import rx.observables.JavaFxObservable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,21 +60,14 @@ public class MainController {
     private WeatherProxy weather;
     private PollutionProxy pollution;
 
-    @FXML
-    private void initialize(){
+    private void prepareView(){
         List<WeatherDataSource> sources = new ArrayList();
         sources.add(new MeteoWaw());
         sources.add(new OpenWeatherMap("db09a595e245a0ee1640c8e9ecdaff52"));
         weather = new WeatherProxy(sources);
-        weather.chooseSource(1);
-        weather.getStatusStream().subscribe(evt -> System.out.println(evt));
-        weather.getUpdateStream().subscribe(w -> System.out.println(w.temperature+"; "+w.clouds));
-        //weather.manualRefreshRequest();
+        weather.chooseSource(0);
 
         pollution = new PollutionProxy(new PowietrzeGiosGov());
-        pollution.getStatusStream().subscribe(evt -> System.out.println(evt));
-        pollution.getUpdateStream().subscribe(p -> System.out.println(p.pm10+"; "+p.pm25));
-        //pollution.manualRefreshRequest();
 
         temperature.setSource(weather.getTemperatureStream());
         humidity.setSource(weather.getHumidityStream());
@@ -89,5 +83,22 @@ public class MainController {
 
         pm25.setSource(pollution.getPM25());
         pm10.setSource(pollution.getPM10());
+    }
+
+    private void prepareControls(){
+        JavaFxObservable.actionEventsOf(refreshButton).subscribe(evt -> {
+            weather.manualRefreshRequest();
+            pollution.manualRefreshRequest();
+        });
+
+        JavaFxObservable.actionEventsOf(settingsButton).subscribe(evt -> {
+            System.out.println("TODO: show settings");
+        });
+    }
+
+    @FXML
+    private void initialize(){
+        prepareView();
+        prepareControls();
     }
 }
