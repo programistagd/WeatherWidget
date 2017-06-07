@@ -17,11 +17,13 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import rx.Observable;
 import rx.observables.JavaFxObservable;
 import rx.schedulers.JavaFxScheduler;
 import rx.subscribers.JavaFxSubscriber;
-
+;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +76,9 @@ public class MainController {
     @FXML
     private Button settingsButton;
 
+    @FXML
+    private ImageView weatherIcon;
+
     private WeatherProxy weather;
     private PollutionProxy pollution;
     private List<String> weatherSourceNames;
@@ -88,6 +93,7 @@ public class MainController {
         sources.add(new ForceErrorWeatherSource());
         weatherSourceNames.add("Test Error Handling (always fails)");
         weather = new WeatherProxy(sources);
+        weather.getChosenSourceProperty().setValue(1);//make OpenWeatherMap default
 
         pollution = new PollutionProxy(new PowietrzeGiosGov());
 
@@ -102,6 +108,21 @@ public class MainController {
         pressure.setSource(weather.getPressureStream());
 
         //TODO icon
+        weather.getIconStream().subscribe(icon -> {
+            if(icon == "-"){
+                weatherIcon.setVisible(false);
+            }
+            else{
+                try {
+                    weatherIcon.setImage(new Image(AppMain.class.getResourceAsStream("/icons/" + icon + ".png")));
+                    weatherIcon.setVisible(true);
+                }
+                catch(NullPointerException | IllegalArgumentException e){
+                    log.error(e);
+                    weatherIcon.setVisible(false);
+                }
+            }
+        });
 
         pm25.setSource(pollution.getPM25());
         pm10.setSource(pollution.getPM10());
