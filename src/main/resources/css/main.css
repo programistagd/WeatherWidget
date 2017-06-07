@@ -1,3 +1,6 @@
+.jfx-decorator {
+    -fx-border-width: 0;
+}
 
 .jfx-decorator-button {
 	-fx-background-color: TRANSPARENT;
@@ -9,9 +12,8 @@
 	-fx-padding: 0 0 4 0;
 }
 
-
-.jfx-dialog-overlay-pane {
-    -fx-background-color: rgba(0.0, 0.0, 0.0, 0.1);
+.resize-border {
+	-fx-border-width: 0;
 }
 
 .close-button:hover {
@@ -24,7 +26,7 @@
 }
 
 #contentContainer {
-	-fx-background-color: rgba(100.0, 190.0, 250.0, 0.9);
+	-fx-background-color: rgba(121, 217, 247, 250);
 	-fx-padding: 10.0px;
 }
 
@@ -42,4 +44,17 @@
 
 #errorIcon {
 	-fx-icon-color: -fx-red-color;
+}
+
+.value, #title {
+    -fx-font-weight: bold;
+}
+
+.value-container {
+    -fx-margin: 5px;
+    -fx-font-size: 15px;
+}
+
+#title {
+    -fx-font-size: 23px;
 }

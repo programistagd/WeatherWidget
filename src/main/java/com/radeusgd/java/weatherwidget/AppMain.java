@@ -1,11 +1,5 @@
 package com.radeusgd.java.weatherwidget;
 
-import com.radeusgd.java.weatherwidget.network.PollutionProxy;
-import com.radeusgd.java.weatherwidget.network.WeatherDataSource;
-import com.radeusgd.java.weatherwidget.network.WeatherProxy;
-import com.radeusgd.java.weatherwidget.network.datasources.MeteoWaw;
-import com.radeusgd.java.weatherwidget.network.datasources.OpenWeatherMap;
-import com.radeusgd.java.weatherwidget.network.datasources.PowietrzeGiosGov;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -14,13 +8,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.apache.log4j.BasicConfigurator;
 import com.jfoenix.controls.JFXDecorator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Radek on 01.06.2017.
@@ -29,7 +21,7 @@ public class AppMain extends Application{
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AppMain.class);
 
     private static final String FXML_MAIN_FORM_TEMPLATE = "/fxml/widget-main.fxml";
-    private static final String JFX_CSS = "/css/jfx.css";
+    private static final String JFX_CSS = "/css/main.css";
     private static final String ICON = "/icons/icon.png";
 
     private Stage mainStage;
@@ -45,17 +37,17 @@ public class AppMain extends Application{
         ObservableList<Node> buttonsList = ((Pane) decorator.getChildren().get(0)).getChildren();
         buttonsList.get(buttonsList.size() - 1).getStyleClass().add("close-button");
 
+
+
         Scene scene = new Scene(decorator);
         scene.setFill(null);
 
-        scene.getStylesheets().addAll(/*AppMain.class.getResource(FONT_CSS).toExternalForm(),
-                AppMain.class.getResource(MATERIAL_CSS).toExternalForm(),*/
-                AppMain.class.getResource(JFX_CSS).toExternalForm());
+        scene.getStylesheets().addAll(AppMain.class.getResource(JFX_CSS).toExternalForm());
 
         mainStage.setScene(scene);
 
-        mainStage.setWidth(400);
-        mainStage.setHeight(300);
+        mainStage.setWidth(420);
+        mainStage.setHeight(240);
         mainStage.setResizable(false);
 
         mainStage.getIcons().add(new Image(AppMain.class.getResourceAsStream(ICON)));

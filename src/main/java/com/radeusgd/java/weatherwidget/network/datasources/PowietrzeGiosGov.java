@@ -14,6 +14,11 @@ import com.google.gson.JsonParser;
 public class PowietrzeGiosGov extends PollutionDataSource {
     private static final int STATION_ID = 544;//station Marszałkowska
 
+    String formatPollutionValue(String value){
+        float v = Float.parseFloat(value);
+        return String.format("%.1f", v);
+    }
+
     @Override
     protected PollutionEvent parseHtml(String html){
         try {
@@ -23,7 +28,9 @@ public class PowietrzeGiosGov extends PollutionDataSource {
                 JsonObject o = e.getAsJsonObject();
                 if (o.get("stationId").getAsInt() == STATION_ID) {
                     JsonObject values = o.get("values").getAsJsonObject();
-                    return new PollutionEvent(values.get("PM2.5").getAsString(), values.get("PM10").getAsString());
+                    return new PollutionEvent(
+                            formatPollutionValue(values.get("PM2.5").getAsString()),
+                            formatPollutionValue(values.get("PM10").getAsString()));
                 }
             }
             ErrorStream.getInstance().notifyAboutError(createRequestError(new Exception("Couldn't find station Marszałkowska ("+STATION_ID+") in server's response")));

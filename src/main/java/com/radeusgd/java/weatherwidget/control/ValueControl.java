@@ -38,7 +38,7 @@ public class ValueControl extends Pane {
 
     private void createContentControls() {
         textControl = new Text();
-        textControl.getStyleClass().add("rate-value");
+        textControl.getStyleClass().add("value");
 
         prefixLabel = new Text();
         prefixLabel.textProperty().bind(prefixProperty);

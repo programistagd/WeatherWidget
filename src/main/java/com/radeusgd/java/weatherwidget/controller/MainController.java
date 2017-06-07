@@ -158,6 +158,9 @@ public class MainController {
         workingIcon.managedProperty().bind(workingIcon.visibleProperty());
 
         Tooltip.install(workingIcon, new Tooltip("Fetching data..."));
+
+        weatherIcon.setFitWidth(64);
+        weatherIcon.setPreserveRatio(true);
     }
 
     private void prepareControls(){

@@ -30,6 +30,10 @@ public class OpenWeatherMap extends WeatherDataSource {
         return directions[idx];
     }
 
+    private String formatWindSpeed(String s){
+        return s.replace('.', ',');//make commas as decimal place delimiters to be consistent across sources
+    }
+
     @Override
     protected WeatherEvent parseHtml(String html) {
         try {
@@ -40,7 +44,7 @@ public class OpenWeatherMap extends WeatherDataSource {
             return new WeatherEvent(m.get("temp").getAsString(),
                     m.get("pressure").getAsString(),
                     o.get("clouds").getAsJsonObject().get("all").getAsString(),
-                    wind.get("speed").getAsString(),
+                    formatWindSpeed(wind.get("speed").getAsString()),
                     formatWindDeg(wind.get("deg").getAsFloat()),
                     m.get("humidity").getAsString(),
                     o.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("icon").getAsString());
