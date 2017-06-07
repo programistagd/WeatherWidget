@@ -59,11 +59,6 @@ public class WeatherProxy extends DataProvider<WeatherEvent> {
         currentSub = currentSrc.getEventStream().subscribe(this::onIncomingData);
     }
 
-    private void onIncomingData(WeatherEvent event){
-        dataEvents.onNext(event);
-        statusEvents.onNext(StatusEvent.UPDATE_COMPLETED);
-    }
-
     protected void onUpdateRequested(){
         statusEvents.onNext(StatusEvent.UPDATE_IN_PROGRESS);
         currentSrc.makeRequest();

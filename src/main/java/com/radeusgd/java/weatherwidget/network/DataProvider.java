@@ -2,6 +2,7 @@ package com.radeusgd.java.weatherwidget.network;
 
 
 import com.radeusgd.java.weatherwidget.event.StatusEvent;
+import com.radeusgd.java.weatherwidget.event.WeatherEvent;
 import rx.Observable;
 import rx.schedulers.JavaFxScheduler;
 import rx.subjects.PublishSubject;
@@ -40,6 +41,16 @@ public abstract class DataProvider<T> {
 
     public Observable<StatusEvent> getStatusStream(){
         return statusEvents.asObservable();
+    }
+
+    protected void onIncomingData(T event){
+        if(event == null){
+            statusEvents.onNext(StatusEvent.UPDATE_FAILED);
+        }
+        else {
+            dataEvents.onNext(event);
+            statusEvents.onNext(StatusEvent.UPDATE_COMPLETED);
+        }
     }
 
     protected abstract void onUpdateRequested();

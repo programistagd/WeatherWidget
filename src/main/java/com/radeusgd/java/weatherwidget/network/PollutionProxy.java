@@ -30,11 +30,6 @@ public class PollutionProxy extends DataProvider<PollutionEvent> {
         source.makeRequest();
     }
 
-    private void onIncomingData(PollutionEvent event){
-        dataEvents.onNext(event);
-        statusEvents.onNext(StatusEvent.UPDATE_COMPLETED);
-    }
-
     public Observable<String> getPM25(){
         return prepareSubjectForFX(pm25);
     }

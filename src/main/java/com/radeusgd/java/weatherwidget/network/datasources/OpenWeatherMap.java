@@ -2,7 +2,9 @@ package com.radeusgd.java.weatherwidget.network.datasources;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.radeusgd.java.weatherwidget.event.ErrorStream;
 import com.radeusgd.java.weatherwidget.event.WeatherEvent;
+import com.radeusgd.java.weatherwidget.event.WeatherNotFoundException;
 import com.radeusgd.java.weatherwidget.network.WeatherDataSource;
 import io.reactivex.netty.RxNetty;
 import io.reactivex.netty.protocol.http.client.HttpClientRequest;
@@ -33,22 +35,28 @@ public class OpenWeatherMap extends WeatherDataSource {
     }
 
     @Override
-    public void makeRequest() {
-        RxNetty.createHttpRequest(HttpClientRequest.createGet(URL))
-                .compose(this::unpackResponse)
-                .map(html -> {
-                    JsonParser p = new JsonParser();
-                    JsonObject o = p.parse(html).getAsJsonObject();
-                    JsonObject m = o.get("main").getAsJsonObject();
-                    JsonObject wind = o.get("wind").getAsJsonObject();
-                    return new WeatherEvent(m.get("temp").getAsString(),
-                            m.get("pressure").getAsString(),
-                            o.get("clouds").getAsJsonObject().get("all").getAsString(),
-                            wind.get("speed").getAsString(),
-                            formatWindDeg(wind.get("deg").getAsFloat()),
-                            m.get("humidity").getAsString(),
-                            o.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("icon").getAsString());
-                }
-                ).subscribe(d -> dataStream.onNext(d));
+    protected WeatherEvent parseHtml(String html) {
+        try {
+            JsonParser p = new JsonParser();
+            JsonObject o = p.parse(html).getAsJsonObject();
+            JsonObject m = o.get("main").getAsJsonObject();
+            JsonObject wind = o.get("wind").getAsJsonObject();
+            return new WeatherEvent(m.get("temp").getAsString(),
+                    m.get("pressure").getAsString(),
+                    o.get("clouds").getAsJsonObject().get("all").getAsString(),
+                    wind.get("speed").getAsString(),
+                    formatWindDeg(wind.get("deg").getAsFloat()),
+                    m.get("humidity").getAsString(),
+                    o.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("icon").getAsString());
+        }
+        catch(ClassCastException | IllegalStateException e){
+            ErrorStream.getInstance().notifyAboutError(new WeatherNotFoundException(e));
+            return null;
+        }
+    }
+
+    @Override
+    protected String getURL(){
+        return URL;
     }
 }
