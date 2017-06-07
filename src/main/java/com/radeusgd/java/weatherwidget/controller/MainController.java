@@ -13,9 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.text.Text;
-import javafx.util.Pair;
+import javafx.scene.layout.StackPane;
 import rx.Observable;
 import rx.observables.JavaFxObservable;
 import rx.subscribers.JavaFxSubscriber;
@@ -29,6 +27,9 @@ import java.util.List;
  */
 public class MainController {
     private static final String FXML_SETTINGS_DIALOG_TEMPLATE = "/fxml/dialog-settings.fxml";
+
+    @FXML
+    private StackPane mainPane;
 
     @FXML
     private ValueControl temperature;
@@ -65,13 +66,16 @@ public class MainController {
 
     private WeatherProxy weather;
     private PollutionProxy pollution;
+    private List<String> weatherSources;
 
     private void prepareView(){
         List<WeatherDataSource> sources = new ArrayList();
+        weatherSources = new ArrayList<>();
         sources.add(new MeteoWaw());
+        weatherSources.add("meteo.waw.pl");
         sources.add(new OpenWeatherMap("db09a595e245a0ee1640c8e9ecdaff52"));
+        weatherSources.add("Open Weather Map");
         weather = new WeatherProxy(sources);
-        weather.chooseSource(0);
 
         pollution = new PollutionProxy(new PowietrzeGiosGov());
 
@@ -123,7 +127,7 @@ public class MainController {
 
     private void showSettings(){
         if(settingsDialogController == null){
-            settingsDialogController = new SettingsDialogController();
+            settingsDialogController = new SettingsDialogController(weatherSources, weather);
             FXMLLoader loader = new FXMLLoader(AppMain.class.getResource(FXML_SETTINGS_DIALOG_TEMPLATE));
             loader.setController(settingsDialogController);
             try {
@@ -134,7 +138,7 @@ public class MainController {
             }
         }
 
-        settingsDialogController.show();
+        settingsDialogController.show(mainPane);
     }
 
     @FXML

@@ -5,25 +5,27 @@
 <?import com.jfoenix.controls.JFXDialogLayout?>
 <?import javafx.scene.control.Label?>
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.layout.VBox?>
 <JFXDialog xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:id="dialog"
-           prefHeight="200.0" prefWidth="300.0">
+           prefHeight="200.0" prefWidth="250.0">
     <JFXDialogLayout>
         <heading>
             <Label>Settings</Label>
         </heading>
         <body>
-            <Label>
-                TODO
-            </Label>
+            <VBox>
+                <Label>
+                    Weather data source:
+                </Label>
+                <ChoiceBox fx:id="weatherSource"></ChoiceBox>
+            </VBox>
         </body>
         <actions>
-            <JFXButton fx:id="acceptButton" styleClass="dialog-button">
-                Apply
-            </JFXButton>
-            <JFXButton fx:id="cancelButton" styleClass="dialog-button">
-                Cancel
+            <JFXButton fx:id="closeButton" styleClass="dialog-button">
+                OK
             </JFXButton>
         </actions>
     </JFXDialogLayout>
