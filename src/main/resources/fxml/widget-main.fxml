@@ -30,6 +30,7 @@
                 <ValueControl fx:id="pm25" prefix="PM2.5: "></ValueControl>
                 <ValueControl fx:id="pm10" prefix="PM10: "></ValueControl>
                 <ImageView fx:id="weatherIcon"></ImageView>
+                <Label fx:id="updateTime">Data not available</Label>
             </VBox>
         </center>
         <bottom>

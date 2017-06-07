@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 import javafx.scene.image.Image;
@@ -25,7 +26,9 @@ import rx.schedulers.JavaFxScheduler;
 import rx.subscribers.JavaFxSubscriber;
 ;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -79,6 +82,9 @@ public class MainController {
     @FXML
     private ImageView weatherIcon;
 
+    @FXML
+    private Label updateTime;
+
     private WeatherProxy weather;
     private PollutionProxy pollution;
     private List<String> weatherSourceNames;
@@ -126,6 +132,32 @@ public class MainController {
 
         pm25.setSource(pollution.getPM25());
         pm10.setSource(pollution.getPM10());
+
+        Observable<StatusEvent> statusStreams = weather.getStatusStream().mergeWith(pollution.getStatusStream());
+
+        statusStreams.filter(s -> s == StatusEvent.UPDATE_COMPLETED)
+                .observeOn(JavaFxScheduler.getInstance())
+                .subscribe(ignore -> {
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    updateTime.setText("Updated as of "+sdf.format(Calendar.getInstance().getTime()));
+                });
+
+        Observable<Boolean> isWorking = statusStreams.map(statusEvent -> {
+            switch(statusEvent){
+                case UPDATE_COMPLETED:
+                case UPDATE_FAILED:
+                    return -1;
+                case UPDATE_IN_PROGRESS:
+                    return 1;
+            }
+            return 0;//actually unreachable, but IDE doesn't get it?
+        }).scan(0, (x,y) -> x + y)
+                .map(activeAmount -> (activeAmount > 0));
+
+        workingIcon.visibleProperty().bind(JavaFxSubscriber.toBinding(isWorking));
+        workingIcon.managedProperty().bind(workingIcon.visibleProperty());
+
+        Tooltip.install(workingIcon, new Tooltip("Fetching data..."));
     }
 
     private void prepareControls(){
@@ -137,24 +169,6 @@ public class MainController {
         JavaFxObservable.actionEventsOf(settingsButton).subscribe(evt -> {
             showSettings();
         });
-
-        Observable<StatusEvent> statusStreams = weather.getStatusStream().mergeWith(pollution.getStatusStream());
-        Observable<Boolean> isWorking = statusStreams.map(statusEvent -> {
-            switch(statusEvent){
-                case UPDATE_COMPLETED:
-                case UPDATE_FAILED:
-                    return -1;
-                case UPDATE_IN_PROGRESS:
-                    return 1;
-            }
-            return 0;//actually unreachable, but IDE doesn't get it?
-        }).scan(0, (x,y) -> x + y)
-        .map(activeAmount -> (activeAmount > 0));
-
-        workingIcon.visibleProperty().bind(JavaFxSubscriber.toBinding(isWorking));
-        workingIcon.managedProperty().bind(workingIcon.visibleProperty());
-
-        Tooltip.install(workingIcon, new Tooltip("Fetching data..."));
     }
 
     private void prepareErrorHandling(){
