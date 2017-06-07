@@ -2,7 +2,6 @@ package com.radeusgd.java.weatherwidget.network.datasources;
 
 import com.radeusgd.java.weatherwidget.event.ErrorStream;
 import com.radeusgd.java.weatherwidget.event.WeatherEvent;
-import com.radeusgd.java.weatherwidget.event.WeatherNotFoundException;
 import com.radeusgd.java.weatherwidget.network.WeatherDataSource;
 
 import java.util.regex.Matcher;
@@ -41,7 +40,7 @@ public class MeteoWaw extends WeatherDataSource {
                     null);
         }
         catch (HtmlParseException e){
-            ErrorStream.getInstance().notifyAboutError(new WeatherNotFoundException(e));
+            ErrorStream.getInstance().notifyAboutError(createRequestError(e));
             return null;
         }
     }

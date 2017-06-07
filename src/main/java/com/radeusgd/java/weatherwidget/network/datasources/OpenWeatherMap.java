@@ -4,11 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.radeusgd.java.weatherwidget.event.ErrorStream;
 import com.radeusgd.java.weatherwidget.event.WeatherEvent;
-import com.radeusgd.java.weatherwidget.event.WeatherNotFoundException;
 import com.radeusgd.java.weatherwidget.network.WeatherDataSource;
-import io.reactivex.netty.RxNetty;
-import io.reactivex.netty.protocol.http.client.HttpClientRequest;
-
 /**
  * Created by Programistagd on 05.06.2017.
  */
@@ -22,7 +18,7 @@ public class OpenWeatherMap extends WeatherDataSource {
 
     private String formatWindDeg(float deg){
         String[] directions = {"N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"};
-        if(deg > 360.0){
+        if(deg > 360.0 || deg < 0.0){
             return null;
         }
         int idx = 0;
@@ -49,8 +45,8 @@ public class OpenWeatherMap extends WeatherDataSource {
                     m.get("humidity").getAsString(),
                     o.get("weather").getAsJsonArray().get(0).getAsJsonObject().get("icon").getAsString());
         }
-        catch(ClassCastException | IllegalStateException e){
-            ErrorStream.getInstance().notifyAboutError(new WeatherNotFoundException(e));
+        catch(ClassCastException | IllegalStateException | NullPointerException e){
+            ErrorStream.getInstance().notifyAboutError(createRequestError(e));
             return null;
         }
     }

@@ -5,11 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.radeusgd.java.weatherwidget.event.ErrorStream;
 import com.radeusgd.java.weatherwidget.event.PollutionEvent;
-import com.radeusgd.java.weatherwidget.event.PollutionNotFoundException;
-import com.radeusgd.java.weatherwidget.event.WeatherNotFoundException;
 import com.radeusgd.java.weatherwidget.network.PollutionDataSource;
-import io.reactivex.netty.RxNetty;
-import io.reactivex.netty.protocol.http.client.HttpClientRequest;
 import com.google.gson.JsonParser;
 
 /**
@@ -30,11 +26,11 @@ public class PowietrzeGiosGov extends PollutionDataSource {
                     return new PollutionEvent(values.get("PM2.5").getAsString(), values.get("PM10").getAsString());
                 }
             }
-            ErrorStream.getInstance().notifyAboutError(new PollutionNotFoundException(new Exception("Couldn't find station Marszałkowska ("+STATION_ID+") in server's response")));
+            ErrorStream.getInstance().notifyAboutError(createRequestError(new Exception("Couldn't find station Marszałkowska ("+STATION_ID+") in server's response")));
             return null;
         }
         catch(ClassCastException | IllegalStateException e){
-            ErrorStream.getInstance().notifyAboutError(new PollutionNotFoundException(e));
+            ErrorStream.getInstance().notifyAboutError(createRequestError(e));
             return null;
         }
     }
