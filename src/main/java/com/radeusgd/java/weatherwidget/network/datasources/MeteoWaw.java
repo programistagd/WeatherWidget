@@ -19,7 +19,7 @@ public class MeteoWaw extends WeatherDataSource {
     }
 
     private String findSpan(String html, String id) throws HtmlParseException{
-        Pattern pattern = Pattern.compile("<span id=\\\""+id+"\\\">([\\d,NEWS]+)<\\/span>");
+        Pattern pattern = Pattern.compile("<span id=\""+id+"\">([\\d,NEWS]+)</span>");
         Matcher m = pattern.matcher(html);
         if (m.find()) {
             return m.group(1).trim();

@@ -20,7 +20,7 @@
                 <Label>
                     Weather data source:
                 </Label>
-                <ChoiceBox fx:id="weatherSource"></ChoiceBox>
+                <ChoiceBox fx:id="weatherSource" />
             </VBox>
         </body>
         <actions>

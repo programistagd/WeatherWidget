@@ -14,7 +14,7 @@ import com.google.gson.JsonParser;
 public class PowietrzeGiosGov extends PollutionDataSource {
     private static final int STATION_ID = 544;//station Marszałkowska
 
-    String formatPollutionValue(String value){
+    private String formatPollutionValue(String value){
         float v = Float.parseFloat(value);
         return String.format("%.1f", v);
     }

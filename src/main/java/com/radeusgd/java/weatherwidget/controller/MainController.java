@@ -24,7 +24,6 @@ import rx.Observable;
 import rx.observables.JavaFxObservable;
 import rx.schedulers.JavaFxScheduler;
 import rx.subscribers.JavaFxSubscriber;
-;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,7 +89,7 @@ public class MainController {
     private List<String> weatherSourceNames;
 
     private void prepareView(){
-        List<WeatherDataSource> sources = new ArrayList();
+        List<WeatherDataSource> sources = new ArrayList<>();
         weatherSourceNames = new ArrayList<>();
         sources.add(new MeteoWaw());
         weatherSourceNames.add("meteo.waw.pl");
@@ -115,7 +114,7 @@ public class MainController {
 
         //TODO icon
         weather.getIconStream().subscribe(icon -> {
-            if(icon == "-"){
+            if(icon.equals("-")){
                 weatherIcon.setVisible(false);
             }
             else{
@@ -169,9 +168,7 @@ public class MainController {
             pollution.manualRefreshRequest();
         });
 
-        JavaFxObservable.actionEventsOf(settingsButton).subscribe(evt -> {
-            showSettings();
-        });
+        JavaFxObservable.actionEventsOf(settingsButton).subscribe(evt -> showSettings());
     }
 
     private void prepareErrorHandling(){

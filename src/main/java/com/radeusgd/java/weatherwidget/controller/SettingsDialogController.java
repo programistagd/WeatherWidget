@@ -2,9 +2,7 @@ package com.radeusgd.java.weatherwidget.controller;
 
 import com.jfoenix.controls.JFXDialog;
 import com.radeusgd.java.weatherwidget.network.WeatherProxy;
-import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -51,9 +49,7 @@ public class SettingsDialogController {
 
     @FXML
     private void initialize() {
-        JavaFxObservable.actionEventsOf(closeButton).subscribe(ignore -> {
-            dialog.close();
-        });
+        JavaFxObservable.actionEventsOf(closeButton).subscribe(ignore -> dialog.close());
 
         List<Integer> ints = new ArrayList<>();
         for(int i = 0; i < sourceNames.size(); ++i){

@@ -13,7 +13,9 @@ public class WeatherEvent {
     public final String icon;
 
     private String addSufix(String v, String suf){
-        if(v == null) return v;
+        if(v == null){
+            return null;
+        }
         return v + suf;
     }
 

@@ -26,7 +26,12 @@ public class OpenWeatherMap extends WeatherDataSource {
             deg -= 45;
             idx += 1;
         }
-        //TODO may want to test if it works correctly
+
+        assert (idx < directions.length);
+        if(idx >= directions.length){
+            return null;
+        }
+
         return directions[idx];
     }
 

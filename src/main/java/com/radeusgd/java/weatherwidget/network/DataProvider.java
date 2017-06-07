@@ -2,7 +2,6 @@ package com.radeusgd.java.weatherwidget.network;
 
 
 import com.radeusgd.java.weatherwidget.event.StatusEvent;
-import com.radeusgd.java.weatherwidget.event.WeatherEvent;
 import rx.Observable;
 import rx.schedulers.JavaFxScheduler;
 import rx.subjects.PublishSubject;
@@ -25,8 +24,8 @@ public abstract class DataProvider<T> {
         statusEvents = PublishSubject.create();
         manualRefreshRequests = PublishSubject.create();
         Observable<Long> interval = Observable.interval(INITIAL_DELAY, POLL_INTERVAL, TimeUnit.SECONDS);
-        refreshRequests = interval.map(ignore -> new RefreshRequest()).mergeWith(manualRefreshRequests)//łączymy prośby automatyczne (co minutę) z ręcznymi (manualRefreshRequest)
-                            .throttleFirst(500, TimeUnit.MILLISECONDS);//nie akutalizujemy się cześciej niż 2 razy na sekundę
+        refreshRequests = interval.map(ignore -> new RefreshRequest()).mergeWith(manualRefreshRequests)//merge automatic refresh requests with the manual ones (on button clicks)
+                            .throttleFirst(500, TimeUnit.MILLISECONDS);//don't update more frequently then 2 times per second
         refreshRequests.subscribe(ignore -> this.onUpdateRequested());
     }
 

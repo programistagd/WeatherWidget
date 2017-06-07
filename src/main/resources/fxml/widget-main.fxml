@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import com.jfoenix.controls.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import com.radeusgd.java.weatherwidget.control.SpinningFontIcon?>
-
-<?import com.radeusgd.java.weatherwidget.control.ValueControl?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.radeusgd.java.weatherwidget.control.*?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.112-ea"
            fx:controller="com.radeusgd.java.weatherwidget.controller.MainController"
            fx:id="mainPane"
@@ -20,25 +15,25 @@
             <VBox  id="contentContainer">
                 <BorderPane>
                     <top>
-                        <Label fx:id="title">Warsaw, Poland</Label>
+                        <Label id="title">Warsaw, Poland</Label>
                     </top>
                     <left>
                         <VBox>
-                            <ValueControl fx:id="temperature" prefix="Temperature: "></ValueControl>
-                            <ValueControl fx:id="humidity" prefix="Humidity: "></ValueControl>
-                            <ValueControl fx:id="clouds" prefix="Cloudiness: "></ValueControl>
-                            <ValueControl fx:id="windSpeed" prefix="Wind: "></ValueControl>
-                            <ValueControl fx:id="pressure" prefix="Atmospheric pressure: "></ValueControl>
+                            <ValueControl fx:id="temperature" prefix="Temperature: " />
+                            <ValueControl fx:id="humidity" prefix="Humidity: " />
+                            <ValueControl fx:id="clouds" prefix="Cloudiness: " />
+                            <ValueControl fx:id="windSpeed" prefix="Wind: " />
+                            <ValueControl fx:id="pressure" prefix="Atmospheric pressure: " />
                         </VBox>
                     </left>
                     <right>
                         <HBox>
                             <VBox>
                                 <Label>Pollution levels:</Label>
-                                <ValueControl fx:id="pm25" prefix="PM2.5: "></ValueControl>
-                                <ValueControl fx:id="pm10" prefix="PM10: "></ValueControl>
+                                <ValueControl fx:id="pm25" prefix="PM2.5: " />
+                                <ValueControl fx:id="pm10" prefix="PM10: " />
                             </VBox>
-                            <ImageView fx:id="weatherIcon"></ImageView>
+                            <ImageView fx:id="weatherIcon" />
                         </HBox>
                     </right>
                 </BorderPane>
