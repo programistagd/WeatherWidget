@@ -4,7 +4,8 @@ import rx.Observable;
 import rx.subjects.PublishSubject;
 
 /**
- * Created by Programistagd on 07.06.2017.
+ * Global (shared by whole app) stream of errors that should be reported to the user.
+ * Implemented as a singleton.
  */
 public class ErrorStream {
     private ErrorStream(){
@@ -22,10 +23,17 @@ public class ErrorStream {
 
     private final PublishSubject<Exception> stream = PublishSubject.create();
 
+    /**
+     * Push an error into the stream
+     * @param e error to report
+     */
     public void notifyAboutError(Exception e){
         stream.onNext(e);
     }
 
+    /**
+     * @return Stream of errors (Exceptions)
+     */
     public Observable<Exception> getStream(){
         return stream.asObservable();
     }

@@ -1,14 +1,13 @@
 package com.radeusgd.java.weatherwidget.network.datasources;
 
 import com.radeusgd.java.weatherwidget.event.ErrorStream;
-import com.radeusgd.java.weatherwidget.event.WeatherEvent;
-import com.radeusgd.java.weatherwidget.network.WeatherDataSource;
+import com.radeusgd.java.weatherwidget.event.WeatherData;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Programistagd on 05.06.2017.
+ * WeatherDataSource fetching data from http://www.meteo.waw.pl/
  */
 public class MeteoWaw extends WeatherDataSource {
 
@@ -24,13 +23,14 @@ public class MeteoWaw extends WeatherDataSource {
         if (m.find()) {
             return m.group(1).trim();
         }
+
         throw new HtmlParseException("Couldn't find field "+id+" in server's response");
     }
 
     @Override
-    protected WeatherEvent parseHtml(String html){
+    protected WeatherData parseHtml(String html){
         try {
-            return new WeatherEvent(
+            return new WeatherData(
                     findSpan(html, "PARAM_0_TA"),
                     findSpan(html, "PARAM_0_PR"),
                     null,

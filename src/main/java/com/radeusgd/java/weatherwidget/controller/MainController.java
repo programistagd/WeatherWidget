@@ -3,9 +3,9 @@ package com.radeusgd.java.weatherwidget.controller;
 import com.radeusgd.java.weatherwidget.AppMain;
 import com.radeusgd.java.weatherwidget.control.ValueControl;
 import com.radeusgd.java.weatherwidget.event.ErrorStream;
-import com.radeusgd.java.weatherwidget.event.StatusEvent;
+import com.radeusgd.java.weatherwidget.event.UpdateStatusEvent;
 import com.radeusgd.java.weatherwidget.network.PollutionProxy;
-import com.radeusgd.java.weatherwidget.network.WeatherDataSource;
+import com.radeusgd.java.weatherwidget.network.datasources.WeatherDataSource;
 import com.radeusgd.java.weatherwidget.network.WeatherProxy;
 import com.radeusgd.java.weatherwidget.network.datasources.ForceErrorWeatherSource;
 import com.radeusgd.java.weatherwidget.network.datasources.MeteoWaw;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Radek on 01.06.2017.
+ * Main application view controller.
  */
 public class MainController {
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MainController.class);
@@ -132,9 +132,9 @@ public class MainController {
         pm25.setSource(pollution.getPM25());
         pm10.setSource(pollution.getPM10());
 
-        Observable<StatusEvent> statusStreams = weather.getStatusStream().mergeWith(pollution.getStatusStream());
+        Observable<UpdateStatusEvent> statusStreams = weather.getStatusStream().mergeWith(pollution.getStatusStream());
 
-        statusStreams.filter(s -> s == StatusEvent.UPDATE_COMPLETED)
+        statusStreams.filter(s -> s == UpdateStatusEvent.UPDATE_COMPLETED)
                 .observeOn(JavaFxScheduler.getInstance())
                 .subscribe(ignore -> {
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");

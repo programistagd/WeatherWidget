@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Programistagd on 06.06.2017.
+ * Settings view controller.
  */
 public class SettingsDialogController {
     private final List<String> sourceNames;

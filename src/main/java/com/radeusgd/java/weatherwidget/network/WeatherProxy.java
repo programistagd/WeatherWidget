@@ -1,7 +1,8 @@
 package com.radeusgd.java.weatherwidget.network;
 
-import com.radeusgd.java.weatherwidget.event.StatusEvent;
-import com.radeusgd.java.weatherwidget.event.WeatherEvent;
+import com.radeusgd.java.weatherwidget.event.UpdateStatusEvent;
+import com.radeusgd.java.weatherwidget.event.WeatherData;
+import com.radeusgd.java.weatherwidget.network.datasources.WeatherDataSource;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import rx.Subscription;
@@ -9,12 +10,14 @@ import rx.observables.JavaFxObservable;
 import rx.subjects.PublishSubject;
 import rx.Observable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Radek on 01.06.2017.
+ * Weather DataProvider that allows to choose DataSource on the fly.
+ * It also has streams that unpack WeatherData into particular weather aspects (temperature, humidity etc.)
  */
-public class WeatherProxy extends DataProvider<WeatherEvent> {
+public class WeatherProxy extends DataProvider<WeatherData> {
 
     private final List<WeatherDataSource> sources;
     private Subscription currentSub;
@@ -30,13 +33,19 @@ public class WeatherProxy extends DataProvider<WeatherEvent> {
 
     private final ObjectProperty<Integer> chosenSource = new SimpleObjectProperty<>(0);
 
+    /**
+     * @return property indicating which source from the list is currently used
+     */
     public ObjectProperty<Integer> getChosenSourceProperty(){
         return chosenSource;
     }
 
+    /**
+     * Creates a new WeatherProxy using sources from the specified list, by default it uses the first source from that list
+     * @param sources list of sources that the proxy will be able to choose from
+     */
     public WeatherProxy(List<WeatherDataSource> sources){
-        super();
-        this.sources = sources;
+        this.sources = new ArrayList<>(sources);
         updateSource(chosenSource.get());
         JavaFxObservable.changesOf(chosenSource).subscribe(change -> updateSource(change.getNewVal()));
         getUpdateStream().subscribe(weather -> {
@@ -56,11 +65,11 @@ public class WeatherProxy extends DataProvider<WeatherEvent> {
         }
 
         currentSrc = sources.get(id);
-        currentSub = currentSrc.getEventStream().subscribe(this::onIncomingData);
+        currentSub = currentSrc.getDataStream().subscribe(this::onIncomingData);
     }
 
     protected void onUpdateRequested(){
-        statusEvents.onNext(StatusEvent.UPDATE_IN_PROGRESS);
+        statusEvents.onNext(UpdateStatusEvent.UPDATE_IN_PROGRESS);
         currentSrc.makeRequest();
     }
 

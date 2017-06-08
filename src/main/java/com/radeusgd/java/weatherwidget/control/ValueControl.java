@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 import rx.Observable;
 
 /**
- * Created by Radek on 01.06.2017.
+ * A JFX control displaying a value that is fetched from a specified source
  */
 public class ValueControl extends Pane {
     private final StringProperty prefixProperty = new SimpleStringProperty();

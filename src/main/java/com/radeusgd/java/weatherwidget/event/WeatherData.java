@@ -1,9 +1,9 @@
 package com.radeusgd.java.weatherwidget.event;
 
 /**
- * Created by Radek on 01.06.2017.
+ * Collects various apsects of current weather
  */
-public class WeatherEvent {
+public class WeatherData {
     public final String temperature;
     public final String pressure;
     public final String clouds;
@@ -19,7 +19,7 @@ public class WeatherEvent {
         return v + suf;
     }
 
-    public WeatherEvent(String temperature, String pressure, String clouds, String windSpeed, String windDir, String humidity, String icon){
+    public WeatherData(String temperature, String pressure, String clouds, String windSpeed, String windDir, String humidity, String icon){
         this.temperature = addSufix(temperature,"°C");
         this.pressure = addSufix(pressure,"hPa");
         this.clouds = addSufix(clouds,"%");
@@ -29,7 +29,7 @@ public class WeatherEvent {
         this.icon = icon;
     }
 
-    public WeatherEvent(String temperature, String pressure, String clouds, String windSpeed, String windDir, String humidity){
+    public WeatherData(String temperature, String pressure, String clouds, String windSpeed, String windDir, String humidity){
         this(temperature, pressure, clouds, windSpeed, windDir, humidity, null);
     }
 }

@@ -3,24 +3,36 @@ package com.radeusgd.java.weatherwidget.network.datasources;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.radeusgd.java.weatherwidget.event.ErrorStream;
-import com.radeusgd.java.weatherwidget.event.WeatherEvent;
-import com.radeusgd.java.weatherwidget.network.WeatherDataSource;
+import com.radeusgd.java.weatherwidget.event.WeatherData;
+
 /**
- * Created by Programistagd on 05.06.2017.
+ * WeatherDataSource using OpenWeatherMap.
+ * Needs an API key.
  */
 public class OpenWeatherMap extends WeatherDataSource {
 
     private final String URL;
 
+    /**
+     * Creates a new source using specified API key, see: http://openweathermap.org/api
+     * @param API_KEY
+     */
     public OpenWeatherMap(String API_KEY){
         URL = "http://api.openweathermap.org/data/2.5/weather?q=Warsaw,pl&units=metric&appid="+API_KEY;
     }
 
+    /**
+     * Converts angular direction into a simple compass direction (NESW)
+     * @param deg direction in degrees (0-360), 0 means North
+     * @return returns a string representing a closest direction or null if the argument was invalid
+     */
     private String formatWindDeg(float deg){
         String[] directions = {"N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"};
+
         if(deg > 360.0 || deg < 0.0){
             return null;
         }
+
         int idx = 0;
         while(deg > 22.5){
             deg -= 45;
@@ -35,18 +47,22 @@ public class OpenWeatherMap extends WeatherDataSource {
         return directions[idx];
     }
 
+    /**
+     * Make commas as decimal place delimiters to be consistent across sources
+     */
     private String formatWindSpeed(String s){
-        return s.replace('.', ',');//make commas as decimal place delimiters to be consistent across sources
+        return s.replace('.', ',');
     }
 
     @Override
-    protected WeatherEvent parseHtml(String html) {
+    protected WeatherData parseHtml(String html) {
         try {
             JsonParser p = new JsonParser();
             JsonObject o = p.parse(html).getAsJsonObject();
             JsonObject m = o.get("main").getAsJsonObject();
             JsonObject wind = o.get("wind").getAsJsonObject();
-            return new WeatherEvent(m.get("temp").getAsString(),
+
+            return new WeatherData(m.get("temp").getAsString(),
                     m.get("pressure").getAsString(),
                     o.get("clouds").getAsJsonObject().get("all").getAsString(),
                     formatWindSpeed(wind.get("speed").getAsString()),

@@ -14,7 +14,7 @@ import org.apache.log4j.BasicConfigurator;
 import com.jfoenix.controls.JFXDecorator;
 
 /**
- * Created by Radek on 01.06.2017.
+ * Entry point for the application. Initializes JFX etc.
  */
 public class AppMain extends Application{
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AppMain.class);

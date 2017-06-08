@@ -1,11 +1,11 @@
 package com.radeusgd.java.weatherwidget.network.datasources;
 
 import com.radeusgd.java.weatherwidget.event.ErrorStream;
-import com.radeusgd.java.weatherwidget.event.WeatherEvent;
-import com.radeusgd.java.weatherwidget.network.WeatherDataSource;
+import com.radeusgd.java.weatherwidget.event.WeatherData;
 
 /**
- * Created by Programistagd on 07.06.2017.
+ * A dummy WeatherDataSource that immediately fails on each request.
+ * Used to demonstrate error handling.
  */
 public class ForceErrorWeatherSource extends WeatherDataSource {
 
@@ -15,7 +15,7 @@ public class ForceErrorWeatherSource extends WeatherDataSource {
     }
 
     @Override
-    protected WeatherEvent parseHtml(String html) {
+    protected WeatherData parseHtml(String html) {
         return null;
     }
 
