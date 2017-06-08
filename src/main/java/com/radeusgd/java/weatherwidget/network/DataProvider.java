@@ -14,6 +14,9 @@ import java.util.concurrent.TimeUnit;
  * It will request fresh data periodically or when asked by the user.
  * It reports when the data update has started and finished (successfully or not) using the statusStream.
  * Most recent pieces of data land in updateStream (and classes that implement this abstract class should extract these updates and provide streams for each of the unpacked values)
+ *
+ * If the request failed no data is sent onto updateStream and unpacked values streams.
+ * Sometimes the result may be incomplete (some fields of the data piece of type T can be null, we allow this). In that case, the DataProvider should map such values into "-" characters so that the view can indicate a value is missing and not keep the old (possibly stale one). This is achieved by prepareSubjectForFX.
  */
 public abstract class DataProvider<T> {
 
