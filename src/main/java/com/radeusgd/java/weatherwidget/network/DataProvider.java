@@ -13,11 +13,9 @@ import java.util.concurrent.TimeUnit;
  * Created by Radek on 01.06.2017.
  */
 public abstract class DataProvider<T> {
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(DataProvider.class);
 
     private static final int POLL_INTERVAL = 60;
     private static final int INITIAL_DELAY = 2;
-    private static final int TIMEOUT = 20;
 
     public DataProvider(){
         dataEvents = PublishSubject.create();
@@ -29,8 +27,8 @@ public abstract class DataProvider<T> {
         refreshRequests.subscribe(ignore -> this.onUpdateRequested());
     }
 
-    protected PublishSubject<T> dataEvents;
-    protected PublishSubject<StatusEvent> statusEvents;
+    protected final PublishSubject<T> dataEvents;
+    protected final PublishSubject<StatusEvent> statusEvents;
 
     class RefreshRequest{}
 
@@ -54,8 +52,8 @@ public abstract class DataProvider<T> {
 
     protected abstract void onUpdateRequested();
 
-    private PublishSubject<RefreshRequest> manualRefreshRequests;
-    private Observable<RefreshRequest> refreshRequests;
+    private final PublishSubject<RefreshRequest> manualRefreshRequests;
+    private final Observable<RefreshRequest> refreshRequests;
 
     public void manualRefreshRequest(){
         manualRefreshRequests.onNext(new RefreshRequest());

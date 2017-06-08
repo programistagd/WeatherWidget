@@ -20,7 +20,7 @@ public class ErrorStream {
         return instance;
     }
 
-    private PublishSubject<Exception> stream = PublishSubject.create();
+    private final PublishSubject<Exception> stream = PublishSubject.create();
 
     public void notifyAboutError(Exception e){
         stream.onNext(e);

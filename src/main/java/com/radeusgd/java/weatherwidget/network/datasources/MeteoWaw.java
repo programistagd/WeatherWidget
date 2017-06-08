@@ -36,8 +36,7 @@ public class MeteoWaw extends WeatherDataSource {
                     null,
                     findSpan(html, "PARAM_0_WV"),
                     findSpan(html, "PARAM_0_WDABBR"),
-                    findSpan(html, "PARAM_0_RH"),
-                    null);
+                    findSpan(html, "PARAM_0_RH"));
         }
         catch (HtmlParseException e){
             ErrorStream.getInstance().notifyAboutError(createRequestError(e));

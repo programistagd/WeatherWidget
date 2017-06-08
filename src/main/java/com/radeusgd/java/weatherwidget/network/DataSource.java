@@ -23,7 +23,7 @@ class HttpError extends RuntimeException{
 public abstract class DataSource<T> {
     private final static long TIMEOUT = 10;
 
-    protected PublishSubject<T> dataStream = PublishSubject.create();
+    protected final PublishSubject<T> dataStream = PublishSubject.create();
 
     public Observable<T> getEventStream(){
         return dataStream.asObservable();
@@ -39,7 +39,7 @@ public abstract class DataSource<T> {
                 .compose(this::unpackResponse)
                 .map(this::parseHtml)
                 .timeout(TIMEOUT, TimeUnit.SECONDS)
-                .subscribe(d -> dataStream.onNext(d),
+                .subscribe(dataStream::onNext,
                         this::handleRequestError);
     }
 

@@ -16,19 +16,19 @@ import java.util.List;
  */
 public class WeatherProxy extends DataProvider<WeatherEvent> {
 
-    private List<WeatherDataSource> sources;
+    private final List<WeatherDataSource> sources;
     private Subscription currentSub;
     private WeatherDataSource currentSrc;
 
-    private PublishSubject<String> temperatures = PublishSubject.create();
-    private PublishSubject<String> pressures = PublishSubject.create();
-    private PublishSubject<String> clouds = PublishSubject.create();
-    private PublishSubject<String> windSpeeds = PublishSubject.create();
-    private PublishSubject<String> windDirs = PublishSubject.create();
-    private PublishSubject<String> humidities = PublishSubject.create();
-    private PublishSubject<String> icons = PublishSubject.create();
+    private final PublishSubject<String> temperatures = PublishSubject.create();
+    private final PublishSubject<String> pressures = PublishSubject.create();
+    private final PublishSubject<String> clouds = PublishSubject.create();
+    private final PublishSubject<String> windSpeeds = PublishSubject.create();
+    private final PublishSubject<String> windDirs = PublishSubject.create();
+    private final PublishSubject<String> humidities = PublishSubject.create();
+    private final PublishSubject<String> icons = PublishSubject.create();
 
-    private ObjectProperty<Integer> chosenSource = new SimpleObjectProperty<>(0);
+    private final ObjectProperty<Integer> chosenSource = new SimpleObjectProperty<>(0);
 
     public ObjectProperty<Integer> getChosenSourceProperty(){
         return chosenSource;

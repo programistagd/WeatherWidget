@@ -4,16 +4,15 @@ import com.radeusgd.java.weatherwidget.event.PollutionEvent;
 import com.radeusgd.java.weatherwidget.event.StatusEvent;
 import rx.Observable;
 import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
 
 /**
  * Created by Programistagd on 05.06.2017.
  */
 public class PollutionProxy extends DataProvider<PollutionEvent> {
-    private PollutionDataSource source;
+    private final PollutionDataSource source;
 
-    private SerializedSubject<String,String> pm25 = new SerializedSubject<>(PublishSubject.create());
-    private SerializedSubject<String,String> pm10 = new SerializedSubject<>(PublishSubject.create());
+    private final PublishSubject<String> pm25 = PublishSubject.create();
+    private final PublishSubject<String> pm10 = PublishSubject.create();
 
     public PollutionProxy(PollutionDataSource source){
         this.source = source;

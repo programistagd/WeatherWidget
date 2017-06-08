@@ -17,8 +17,8 @@ import java.util.List;
  * Created by Programistagd on 06.06.2017.
  */
 public class SettingsDialogController {
-    private List<String> sourceNames;
-    private WeatherProxy weather;
+    private final List<String> sourceNames;
+    private final WeatherProxy weather;
 
     public SettingsDialogController(List<String> sourceNames, WeatherProxy weather){
         this.sourceNames = sourceNames;

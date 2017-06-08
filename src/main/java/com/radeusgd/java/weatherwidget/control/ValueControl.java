@@ -13,9 +13,9 @@ import rx.Observable;
  * Created by Radek on 01.06.2017.
  */
 public class ValueControl extends Pane {
-    private StringProperty prefixProperty = new SimpleStringProperty();
+    private final StringProperty prefixProperty = new SimpleStringProperty();
 
-    private ObjectProperty<Observable<String>> sourceProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<Observable<String>> sourceProperty = new SimpleObjectProperty<>();
     private HBox innerContainer;
     private Text prefixLabel;
     private Text textControl;
