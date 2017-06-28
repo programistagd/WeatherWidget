@@ -9,3 +9,5 @@ Overview of data flow in the app:
 DataSource stream into separate streams for each of values provided
 
 ValueControl displays values from these streams
+
+Icons used come from https://openweathermap.org/weather-conditions
